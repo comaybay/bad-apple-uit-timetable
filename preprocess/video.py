@@ -10,8 +10,7 @@ def process(video_path, out_path, resize_scale):
 
     print(f"convert video from {video_path} to json coordinate array...")
     print("processing video...")
-    # while success:
-    for i in range(1000):
+    while success:
         resized_frame = cv2.resize(frame, None, fx=resize_scale, fy=resize_scale)
         matrix = process_frame(resized_frame)
         frame_matrices.append(matrix)
