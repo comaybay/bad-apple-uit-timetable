@@ -1,3 +1,6 @@
 chromeTemp
 .vscode
-**/frames.json
+frames.json
+transcript_en.json
+transcript_jp.json
+transcript_romaji.json
