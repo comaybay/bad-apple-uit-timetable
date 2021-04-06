@@ -36,8 +36,10 @@
 
   console.clear();
   console.log("\nNext Dream...");
-  restoreToOriginal(clonedTable);
+  await restoreToOriginal(clonedTable);
+  console.clear();
 
+  //====
   function createAudioElem() {
     const audio = document.createElement("audio");
     audio.style.position = "fixed";
@@ -185,7 +187,7 @@
           animationPromise = playAnimation();
           resolve();
         }, 150); //try to sync the music with the animation
-        subtitlesPromise = playSubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
+        subtitlesPromise = displaySubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
         audio.onplaying = null; //prevent this function from being called twice
       };
     });
@@ -296,7 +298,7 @@
     tr.appendChild(td);
   }
 
-  async function playSubtitles(transcripts, audio) {
+  async function displaySubtitles(transcripts, audio) {
     const TIME_OFFSET = 0.3; //unfortunately, timeupdate event doesn't update very frequently.
     return new Promise(resolve => {
       console.clear();
