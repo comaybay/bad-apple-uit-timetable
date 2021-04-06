@@ -1,22 +1,27 @@
 (async () => {
   const PATH = "http://localhost:9999"
-  const res = await fetch(`${PATH}/frames.json`);
-  const frames = await res.json();
+  const fetchJson = async (path) => (await fetch(path)).json();
+
+  const transcriptJp = await fetchJson(`${PATH}/transcript_jp.json`)
+  const transcriptRomaji = await fetchJson(`${PATH}/transcript_romaji.json`);
+  const transcriptEn = await fetchJson(`${PATH}/transcript_en.json`);
+  const frames = await fetchJson(`${PATH}/frames.json`);
 
   const table = document.querySelector(".tableheader-processed")
   const thead = table.firstElementChild;
   const tbody = thead.nextElementSibling;
 
-  const TEXT_SPEED = 30;
   const MAX_FRAME_RATE = 30;
+  const TEXT_SPEED = 30;
+  const CELL_REMOVE_SPEED = 100;
+  const CELL_ADD_SPEED = 5;
 
-  const width = frames[0][0].length;
-  const height = frames[0].length;
-  const aspectRatio = width / height;
+  const WIDTH = frames[0][0].length;
+  const HEIGHT = frames[0].length;
+  const ASPECT_RATIO = WIDTH / HEIGHT;
 
-  const rowWidth = parseInt(getComputedStyle(thead).width);
-  const rowHeight = Math.round((rowWidth / aspectRatio) / height);
-
+  const ROW_WIDTH = parseInt(getComputedStyle(thead).width);
+  const ROW_HEIGHT = Math.round((ROW_WIDTH / ASPECT_RATIO) / HEIGHT);
 
   startIntro();
   await setup();  //setup need to finish before startBadApple function
@@ -44,7 +49,7 @@
     //remove initial cells
     await new Promise(resolve => {
       let i = 0;
-      const id = setInterval(removeCells, 100);
+      const id = setInterval(removeCells, CELL_REMOVE_SPEED);
 
       function removeCells() {
         for (const tr of tbody.children) {
@@ -65,12 +70,12 @@
       tbody.innerHTML = "";
       let i = 0;
       let j = 0;
-      const id = setInterval(createScreen, 10);
+      const id = setInterval(createScreen, CELL_ADD_SPEED);
 
       function createScreen() {
         if (j < INITIAL_CELLS_IN_ROW)
           j++;
-        else if (j >= INITIAL_CELLS_IN_ROW && j < width) {
+        else if (j >= INITIAL_CELLS_IN_ROW && j < WIDTH) {
           const th = document.createElement("th");
           thead.firstElementChild.append(th);
 
@@ -82,9 +87,9 @@
           j++;
         }
 
-        if (i < height) {
+        if (i < HEIGHT) {
           const tr = document.createElement("tr");
-          tr.style.height = `${rowHeight}px`;
+          tr.style.height = `${ROW_HEIGHT}px`;
           tr.className = (i % 2) ? "odd" : "even";
 
           const cellCount = Math.max(j, INITIAL_CELLS_IN_ROW);
@@ -98,7 +103,7 @@
           i++;
         }
 
-        if (j === width && i === height) {
+        if (j === WIDTH && i === HEIGHT) {
           clearInterval(id);
           resolve();
         }
@@ -157,7 +162,11 @@
     audio.src = `${PATH}/Bad Apple!!.mp3`;
     document.body.appendChild(audio);
     audio.play();
-    audio.onplaying = () => setTimeout(playAnimation, 150); //try to sync the music with the animation 
+    audio.onplaying = () => {
+      setTimeout(playAnimation, 150); //try to sync the music with the animation
+      playSubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
+      audio.onplaying = null;
+    }
   }
 
   function playAnimation() {
@@ -170,8 +179,8 @@
       }
 
       const frame = frames[i];
-      for (let y = 0; y < height; y++)
-        for (let x = 0; x < width; x++) {
+      for (let y = 0; y < HEIGHT; y++)
+        for (let x = 0; x < WIDTH; x++) {
           const code = frame[y][x];
           if (code === 2)
             continue;
@@ -195,11 +204,11 @@
     let foundBottom = false;
 
     while (!foundRight || !foundBottom) {
-      if (right === width) {
+      if (right === WIDTH) {
         right--;
         foundRight = true;
       }
-      if (bottom === height) {
+      if (bottom === HEIGHT) {
         bottom--;
         foundBottom = true;
       }
@@ -256,6 +265,33 @@
     td.style.padding = 0;
     td.className = (code === 1) ? "" : "rowspan_data";
     tr.appendChild(td);
+  }
+
+  function playSubtitles(transcripts, audio) {
+    console.clear();
+    let i = 0;
+    let showed = false;
+    audio.addEventListener("timeupdate", updateSubtitles);
+    audio.addEventListener("ended", () => audio.removeEventListener("timeupdate", updateSubtitles))
+
+    function updateSubtitles() {
+      const time = audio.currentTime;
+      const { from, to } = transcripts[0][i];
+
+      if (!showed && from < time && time < to) {
+        showed = true;
+        const subtitles = transcripts.map(t => t[i].caption).reduce((sum, caption) => sum + "\n" + caption);
+        const color = (i % 2) ? "color: white; background-color: black;" : "color: black; background-color: white;"
+        console.log(`%c${subtitles}`, `${color} font-size: 13px; text-align: center; padding: 12px 100px; display:block`);
+      }
+      else if (showed && (time < from || to < time)) {
+        showed = false;
+        console.clear();
+        i++;
+        if (i === transcripts[0].length)
+          audio.removeEventListener("timeupdate", updateSubtitles);
+      }
+    }
   }
 })();
 
