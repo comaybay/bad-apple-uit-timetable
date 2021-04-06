@@ -352,6 +352,8 @@
   }
 
   async function restoreToOriginal() {
+    audio.remove();
+
     {
       const tablePromise = scaleTimetable(table, 1, 0);
       const titlePromise = scaleTimetable(title, 1, 0);
