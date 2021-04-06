@@ -1,165 +1,96 @@
-1
-00:00:57,214 --> 00:01:04,041
-♪ Nagareteku toki no naka de demo
-kedarusa ga hora guruguru mawatte ♪
+﻿1
+00:00:29,230 --> 00:00:36,150
+Nagareteku toki no naka de demo kedarusa ga hora guru-guru mawatte
 
 2
-00:01:04,504 --> 00:01:11,030
-♪ Watashi kara hanareru kokoro mo mienaiwa sou shiranai? ♪
+00:00:36,150 --> 00:00:43,100
+Watashi kara hanareru kokoro mo mienai wa sou shiranai?
 
 3
-00:01:11,216 --> 00:01:17,949
-♪ Jibun kara ugoku koto mo naku
-toki no sukima ni nagasare tsuzukete ♪
+00:00:43,100 --> 00:00:50,000
+Jibun’ kara ugoku koto mo naku toki no sukima ni nagasaretsudzukete
 
 4
-00:01:18,089 --> 00:01:24,869
-♪ Shiranai wa mawari no koto nado
-watashi wa watashi sore dake ♪
+00:00:50,000 --> 00:00:57,000
+Shiranai wa mawari no koto nado watashi wa watashi sore dake?
 
 5
-00:01:25,101 --> 00:01:27,875
-♪ Yume miteru? Nani mo mitenai? ♪
+00:00:57,000 --> 00:01:03,530
+Yume miteru? nani mo mitenai? kataru mo muda na jibun’ no kotoba?
 
 6
-00:01:27,875 --> 00:01:31,375
-♪ Kataru mo muda na jibun no kotoba? ♪
+00:01:03,530 --> 00:01:10,460
+Kanashimu nan’te tsukareru dake yo nani mo kan’jizu sugoseba ii no
 
 7
-00:01:31,375 --> 00:01:38,292
-♪ Kanashimu nante tsukareru dake yo
-nani mo kanjizu sugoseba ii no ♪
+00:01:10,460 --> 00:01:17,360
+Tomadou kotoba ataeraretemo jibun’ no kokoro tada uwa no sora
 
 8
-00:01:38,292 --> 00:01:45,250
-♪ Tomadou kotoba ataerarete mo,
-jibun no kokoro tada uwa no sora ♪
+00:01:17,360 --> 00:01:24,400
+Moshi watashi kara ugoku no naraba subete kaeru no nara kuro ni suru
 
 9
-00:01:45,250 --> 00:01:52,315
-♪ Moshi watashi kara ugoku no naraba
-subete kaeru no nara kuro ni suru ♪
+00:01:24,400 --> 00:01:31,260
+Kon’na jibun’ ni mirai wa aru no? kon’na sekai ni watashi wa iru no?
 
 10
-00:01:52,315 --> 00:01:55,890
-♪ Konna jibun ni mirai wa aru no? ♪
+00:01:31,260 --> 00:01:38,330
+Ima setsunai no? ima kanashii no? jibun’ no koto mo wakaranai mama
 
 11
-00:01:55,891 --> 00:01:59,120
-♪ Konna sekai ni watashi wa iru no? ♪
+00:01:38,330 --> 00:01:45,260
+Ayumu koto sae tsukareru dake yo hito no koto nado shiri mo shinai wa
 
 12
-00:01:59,125 --> 00:02:06,130
-♪ Ima setsunai no? Ima kanashii no?
-Jibun no koto mo wakaranai mama ♪
+00:01:45,260 --> 00:01:52,630
+Kon’na watashi mo kawareru no nara moshi kawareru no nara shiro ni naru?
 
 13
-00:02:06,131 --> 00:02:13,190
-♪ Ayumukoto sae tsukareru dake yo
-hito no koto nado shiri mo shinaiwa ♪
+00:02:06,660 --> 00:02:13,540
+Nagareteku toki no naka de demo kedarusa ga hora guru-guru mawatte
 
 14
-00:02:13,190 --> 00:02:20,120
-♪ Konna watashi mo kawareru mo nara,
-moshi kawareru no nara shiro ni naru? ♪
+00:02:13,540 --> 00:02:20,440
+Watashi kara hanareru kokoro mo mienai wa sou shiranai?
 
 15
-00:02:48,507 --> 00:02:55,264
-♪ Nagareteku toki no naka de demo
-kedarusa ga hora guruguru mawatte ♪
+00:02:20,440 --> 00:02:27,400
+Jibun’ kara ugoku koto mo naku toki no sukima ni nagasaretsudzukete
 
 16
-00:02:55,264 --> 00:02:55,264
-♪ Watashi kara hanareru kokoro mo mienaiwa sou shiranai? ♪
+00:02:27,400 --> 00:02:34,400
+Shiranai wa mawari no koto nado watashi wa watashi sore dake?
 
 17
-00:02:55,264 --> 00:03:02,416
-♪ Watashi kara hanareru kokoro mo mienaiwa sou shiranai? ♪
+00:02:34,400 --> 00:02:40,970
+Yume miteru? nani mo mitenai? kataru mo muda na jibun’ no kotoba?
 
 18
-00:03:02,416 --> 00:03:09,240
-♪ Jibun kara ugoku koto mo naku
-toki no sukima ni nagasare tsuzukete ♪
+00:02:40,970 --> 00:02:47,900
+Kanashimu nan’te tsukareru dake yo nani mo kan’jizu sugoseba ii no
 
 19
-00:03:09,359 --> 00:03:16,278
-♪ Shiranai wa mawari no koto nado,
-watashi wa watashi sore dake. ♪
+00:02:47,900 --> 00:02:54,800
+Tomadou kotoba ataeraretemo jibun’ no kokoro tada uwa no sora
 
 20
-00:03:16,278 --> 00:03:22,687
-♪ Yume miteru? Nani mo mitenai? Kataru mo muda na jibun no kotoba? ♪
+00:02:54,800 --> 00:03:01,700
+Moshi watashi kara ugoku no naraba subete kaeru no nara kuro ni suru
 
 21
-00:03:22,687 --> 00:03:29,500
-♪ Kanashimu nante tsukareru dake yo
-nani mo kanjizu sugoseba ii no ♪
+00:03:01,700 --> 00:03:08,760
+Ugoku no naraba ugoku no naraba subete kowasu no subete kowasu wa
 
 22
-00:03:29,500 --> 00:03:36,620
-♪ Tomadou kotoba ataerarete mo, jibun no kokoro tada uwa no sora. ♪
+00:03:08,760 --> 00:03:15,800
+Kanashimu naraba kanashimu naraba watashi no kokoro shiroku kawareru?
 
 23
-00:03:36,625 --> 00:03:43,630
-♪ Moshi watashi kara ugoku no naraba,
-subete kaeru no nara kuro ni suru. ♪
+00:03:15,800 --> 00:03:22,630
+Anata no koto mo watashi no koto mo subete no koto mo mada shiranai no
 
 24
-00:03:43,631 --> 00:03:50,640
-♪ Muda na jikan ni mirai wa aru no? 
- Konna tokoro ni watashi wa iru no? ♪
-
-25
-00:03:50,644 --> 00:03:57,500
-♪ Watashi no koto wo iitai naraba, kotoba ni suru no nara "rokudenashi" ♪
-
-26
-00:03:57,610 --> 00:04:04,297
-♪ Konna tokoro ni watashi wa iru no? 
- Konna jikan ni watashi wa iru no?
-
-27
-00:04:04,297 --> 00:04:11,495
-♪ Konna watashi mo kawareru no nara, moshi 
- kawareru no nara shiro ni naru? ♪
-
-28
-00:04:11,495 --> 00:04:18,250
-♪ Ima yume miteru? Nani mo mitenai? Kataru 
- mo muda na jibun no kotoba? ♪
-
-29
-00:04:18,250 --> 00:04:25,167
-♪ Kanashimu nante tsukareru dake yo
-nani mo kanjizu sugoseba ii no ♪
-
-30
-00:04:25,167 --> 00:04:32,347
-♪ Tomadou kotoba wa ataeraretemo
-jibun no kokoro tada uwa no sora ♪
-
-31
-00:04:32,347 --> 00:04:39,590
-♪ Moshi watashi kara ugoku no naraba
-subete kaeru no nara kuro ni suru ♪
-
-32
-00:04:39,591 --> 00:04:46,186
-♪ Ugoku no naraba, ugoku no naraba,
-subete kowasuwa, subete kowasuwa. ♪
-
-33
-00:04:46,186 --> 00:04:53,080
-♪ Kanashimu naraba, kanashimu naraba,
-watashi no kokoro shiroku kawareru? ♪
-
-34
-00:04:53,083 --> 00:04:59,958
-♪ Anata no koto mo, watashi no koto mo, 
- subete no koto mo mada shiranai no ♪
-
-35
-00:04:59,958 --> 00:05:07,690
-♪ Omoi mabuta wo aketa no naraba, subete 
- kowasu no nara kuro ni nare! ♪
+00:03:22,630 --> 00:03:30,090
+Omoi mabuta wo aketa no naraba subete kowasu no nara kuro ni nare!!!
 
