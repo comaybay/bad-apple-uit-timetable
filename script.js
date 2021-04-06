@@ -6,15 +6,22 @@
   const transcriptRomaji = await fetchJson(`${PATH}/transcript_romaji.json`);
   const transcriptEn = await fetchJson(`${PATH}/transcript_en.json`);
   const frames = await fetchJson(`${PATH}/frames.json`);
+  const audio = createAudioElem();
 
   const table = document.querySelector(".tableheader-processed")
   const thead = table.firstElementChild;
   const tbody = thead.nextElementSibling;
 
+  const title = document.querySelector(".title_thongtindangky");
+
+  const clonedTable = table.cloneNode(true);
+  const clonedTitle = title.cloneNode(true);
+
   const MAX_FRAME_RATE = 30;
-  const TEXT_SPEED = 30;
-  const CELL_REMOVE_SPEED = 100;
-  const CELL_ADD_SPEED = 5;
+  const TEXT_INTERVAL = 30;
+  const CELL_REMOVE_INTERVAL = 100;
+  const CELL_ADD_INTERVAL = 5;
+  const TIMETABLE_SCALE_Y_INTERVAL = 20;
 
   const WIDTH = frames[0][0].length;
   const HEIGHT = frames[0].length;
@@ -24,10 +31,24 @@
   const ROW_HEIGHT = Math.round((ROW_WIDTH / ASPECT_RATIO) / HEIGHT);
 
   startIntro();
-  await setup();  //setup need to finish before startBadApple function
-  startBadApple();
+  await modifyTimetable();  //setup need to finish before startBadApple function
+  await startBadApple();
 
-  async function setup() {
+  console.clear();
+  console.log("\nNext Dream...");
+  restoreToOriginal(clonedTable);
+
+  function createAudioElem() {
+    const audio = document.createElement("audio");
+    audio.style.position = "fixed";
+    audio.style.top = "0";
+    audio.style.left = "0";
+    audio.controls = true;
+    audio.src = `${PATH}/Bad Apple!!.mp3`;
+    return audio;
+  }
+
+  async function modifyTimetable() {
     table.style.tableLayout = "fixed";
 
     for (const tr of tbody.children) {
@@ -49,7 +70,7 @@
     //remove initial cells
     await new Promise(resolve => {
       let i = 0;
-      const id = setInterval(removeCells, CELL_REMOVE_SPEED);
+      const id = setInterval(removeCells, CELL_REMOVE_INTERVAL);
 
       function removeCells() {
         for (const tr of tbody.children) {
@@ -70,7 +91,7 @@
       tbody.innerHTML = "";
       let i = 0;
       let j = 0;
-      const id = setInterval(createScreen, CELL_ADD_SPEED);
+      const id = setInterval(createScreen, CELL_ADD_INTERVAL);
 
       function createScreen() {
         if (j < INITIAL_CELLS_IN_ROW)
@@ -112,10 +133,8 @@
   }
 
   async function startIntro() {
-    const title = document.querySelector(".title_thongtindangky");
-
     await new Promise(resolve => {
-      let id = setInterval(removeTitle, TEXT_SPEED);
+      let id = setInterval(removeTitle, TEXT_INTERVAL);
 
       function removeTitle() {
         const text1 = title.firstChild.nodeValue;
@@ -133,7 +152,7 @@
     await new Promise(resolve => {
       let i = 1;
       let j = 1;
-      const id = setInterval(createSongTitle, TEXT_SPEED);
+      const id = setInterval(createSongTitle, TEXT_INTERVAL);
 
       function createSongTitle() {
         const text1 = "【東方】Bad Apple!!【影絵】";
@@ -153,47 +172,57 @@
     });
   }
 
-  function startBadApple() {
-    const audio = document.createElement("audio");
-    audio.style.position = "fixed";
-    audio.style.top = "0";
-    audio.style.left = "0";
-    audio.controls = true;
-    audio.src = `${PATH}/Bad Apple!!.mp3`;
+  async function startBadApple() {
     document.body.appendChild(audio);
     audio.play();
-    audio.onplaying = () => {
-      setTimeout(playAnimation, 150); //try to sync the music with the animation
-      playSubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
-      audio.onplaying = null;
-    }
+
+    let animationPromise;
+    let subtitlesPromise;
+
+    await new Promise(resolve => {
+      audio.onplaying = () => {
+        setTimeout(() => {
+          animationPromise = playAnimation();
+          resolve();
+        }, 150); //try to sync the music with the animation
+        subtitlesPromise = playSubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
+        audio.onplaying = null; //prevent this function from being called twice
+      };
+    });
+
+    subtitlesPromise.then(logCredit);
+    await animationPromise;
   }
 
-  function playAnimation() {
-    let i = 0;
-    const id = setInterval(render, 1000 / MAX_FRAME_RATE);
+  async function playAnimation() {
+    return new Promise(resolve => {
+      let i = 0;
+      const id = setInterval(render, 1000 / MAX_FRAME_RATE);
 
-    function render() {
-      for (const tr of tbody.children) {
-        tr.innerHTML = "";
-      }
-
-      const frame = frames[i];
-      for (let y = 0; y < HEIGHT; y++)
-        for (let x = 0; x < WIDTH; x++) {
-          const code = frame[y][x];
-          if (code === 2)
-            continue;
-          else {
-            rect = getMaxRect(x, y, frame);
-            addCell(rect, code);
-          }
+      function render() {
+        for (const tr of tbody.children) {
+          tr.innerHTML = "";
         }
 
-      i++;
-      if (i === frames.length)
-        clearInterval(id);
-    };
+        const frame = frames[i];
+        for (let y = 0; y < HEIGHT; y++)
+          for (let x = 0; x < WIDTH; x++) {
+            const code = frame[y][x];
+            if (code === 2)
+              continue;
+            else {
+              rect = getMaxRect(x, y, frame);
+              addCell(rect, code);
+            }
+          }
+
+        i++;
+        if (i === frames.length) {
+          clearInterval(id);
+          resolve();
+        }
+      };
+    });
   }
 
   function getMaxRect(left, top, frame) {
@@ -267,32 +296,105 @@
     tr.appendChild(td);
   }
 
-  function playSubtitles(transcripts, audio) {
-    console.clear();
-    let i = 0;
-    let showed = false;
-    audio.addEventListener("timeupdate", updateSubtitles);
-    audio.addEventListener("ended", () => audio.removeEventListener("timeupdate", updateSubtitles))
+  async function playSubtitles(transcripts, audio) {
+    const TIME_OFFSET = 0.3; //unfortunately, timeupdate event doesn't update very frequently.
+    return new Promise(resolve => {
+      console.clear();
+      let i = 0;
+      let showed = false;
+      audio.addEventListener("timeupdate", updateSubtitles);
+      audio.addEventListener("ended", endAndResolve)
 
-    function updateSubtitles() {
-      const time = audio.currentTime;
-      const { from, to } = transcripts[0][i];
+      function updateSubtitles() {
+        const time = audio.currentTime + 0.4;
+        const { from, to } = transcripts[0][i];
 
-      if (!showed && from < time && time < to) {
-        showed = true;
-        const subtitles = transcripts.map(t => t[i].caption).reduce((sum, caption) => sum + "\n" + caption);
-        const color = (i % 2) ? "color: white; background-color: black;" : "color: black; background-color: white;"
-        console.log(`%c${subtitles}`, `${color} font-size: 13px; text-align: center; padding: 12px 100px; display:block`);
+        if (!showed && from < time && time < to) {
+          showed = true;
+          const subtitles = transcripts.map(t => t[i].caption).reduce((sum, caption) => sum + "\n" + caption);
+          const color = (i % 2) ? "color: white; background-color: black;" : "color: black; background-color: white;"
+          console.log(`%c${subtitles}`, `${color} font-size: 13px; text-align: center; padding: 12px 100px; display:block`);
+        }
+        else if (showed && (time < from || to < time)) {
+          showed = false;
+          console.clear();
+          i++;
+          if (i === transcripts[0].length)
+            endAndResolve();
+        }
       }
-      else if (showed && (time < from || to < time)) {
-        showed = false;
-        console.clear();
-        i++;
-        if (i === transcripts[0].length)
-          audio.removeEventListener("timeupdate", updateSubtitles);
+
+      function endAndResolve() {
+        audio.removeEventListener("timeupdate", updateSubtitles);
+        resolve();
       }
+    })
+  }
+
+  function logCredit() {
+    console.log(
+      "Bad Apple!! (Alstroemeria Records)" +
+      "\nOriginal Composition: ZUN" +
+      "\nArrangement: Masayoshi Minoshima" +
+      "\nLyrics: Haruka" +
+      "\nVocals: nomico" +
+      "\nSource: 東方幻想郷　～ Lotus Land Story" +
+      "\n======================================" +
+      "\nCoding + Subtitles editing: CMB" +
+      "\nSpecial Thanks:" +
+      "\n  kevinjycui: inspired me to make this" +
+      "\n  touhouwiki.net: providing lyrics and translations" +
+      "\n======================================" +
+      "\nThank you for watching!"
+    );
+  }
+
+  async function restoreToOriginal() {
+    {
+      const tablePromise = scaleTimetable(table, 1, 0);
+      const titlePromise = scaleTimetable(title, 1, 0);
+
+      await tablePromise;
+      await titlePromise;
+    }
+
+    table.replaceWith(clonedTable);
+    clonedTable.style.transform = `scaleY(0)`;
+    title.replaceWith(clonedTitle);
+    clonedTitle.style.transform = `scaleY(0)`;
+
+    {
+      const tablePromise = scaleTimetable(clonedTable, 0, 1);
+      const titlePromise = scaleTimetable(clonedTitle, 0, 1);
+
+      await tablePromise;
+      await titlePromise;
+    }
+
+    async function scaleTimetable(table, start, end) {
+      const startLarger = (start - end > 0);
+      const speed = startLarger ? -0.005 : 0.005;
+      const acc = startLarger ? -0.002 : 0.002;
+      const cond = startLarger ? (val) => val <= end : (val) => val >= end;
+
+      return new Promise(resolve => {
+        let val = start;
+        let sumAcc = 0;
+        const id = setInterval(animation, TIMETABLE_SCALE_Y_INTERVAL);
+
+        function animation() {
+          if (cond(val)) {
+            table.style.transform = `scaleY(${end})`;
+            clearInterval(id);
+            resolve();
+            return;
+          }
+
+          table.style.transform = `scaleY(${val})`;
+          val += speed + sumAcc;
+          sumAcc += acc;
+        }
+      });
     }
   }
 })();
-
-
