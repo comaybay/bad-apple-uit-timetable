@@ -216,7 +216,7 @@
     });
 
     await subtitlesPromise
-    setTimeout(logCredit, 1000);
+    setTimeout(logCredits, 1000);
 
     await animationPromise;
     //wait until song ended
@@ -361,7 +361,7 @@
     })
   }
 
-  function logCredit() {
+  function logCredits() {
     console.log(
       "Bad Apple!! (Alstroemeria Records)" +
       "\nOriginal Composition: ZUN" +
@@ -370,11 +370,13 @@
       "\nVocals: nomico" +
       "\nSource: 東方幻想郷　～ Lotus Land Story" +
       "\n======================================" +
+      "\n@2021" +
       "\nCoding, Subtitles editing, Vietnamese transcript: CMB" +
+      "\nSource code: https://github.com/comaybay/bad-apple-uit-timetable" +
       "\n======================================" +
       "\nSpecial thanks to:" +
       "\n  kevinjycui: for inspired me to make this" +
-      "\n  touhouwiki.net and kafkafuura: for providing lyrics and translations" +
+      "\n  touhouwiki.net and kafkafuura: for providing song lyrics and translations" +
       "\n======================================" +
       "\nThank you for watching!"
     );
