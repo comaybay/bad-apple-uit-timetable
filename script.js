@@ -39,14 +39,21 @@
   clearInterval(stop_id);
   await startBadApple();
 
-  setTimeout(async () => {
-    console.clear();
-    console.log("\nNext Dream...");
-    await restoreToOriginal(clonedTable);
-    setTimeout(console.clear, 2000);
-  }, 1000);
+  await wait(1000);
+  console.clear();
+  console.log("\nNext Dream...");
+  await restoreTimetableToOriginal(clonedTable);
+  await wait(1500);
+  console.clear();
+
+  //remove this script from dom
+  document.querySelector("script[src='http://localhost:9999/script.js']").remove();
 
   //====
+  async function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   function createAudioElem() {
     const audio = document.createElement("audio");
     audio.style.position = "fixed";
@@ -55,6 +62,46 @@
     audio.controls = true;
     audio.src = `${PATH}/Bad Apple!!.mp3`;
     return audio;
+  }
+
+  async function startIntro() {
+    await new Promise(resolve => {
+      let id = setInterval(removeTitle, TEXT_INTERVAL);
+
+      function removeTitle() {
+        const text1 = title.firstChild.nodeValue;
+        const text2 = title.firstElementChild.innerText;
+        title.firstChild.nodeValue = text1.slice(0, -1);
+        title.firstElementChild.innerText = text2.slice(0, -1);
+
+        if (text1.length === 0 && text2.length === 0) {
+          clearInterval(id);
+          resolve();
+        }
+      }
+    });
+
+    await new Promise(resolve => {
+      let i = 1;
+      let j = 1;
+      const id = setInterval(createSongTitle, TEXT_INTERVAL);
+
+      function createSongTitle() {
+        const text1 = "【東方】Bad Apple!!【影絵】";
+        const text2 = "Alstroemeria Records";
+        title.firstChild.nodeValue = text1.slice(0, i);
+        title.firstElementChild.innerText = text2.slice(0, j);
+
+        if (i !== text1.length || j !== text2.length) {
+          i = Math.min(i + 1, text1.length);
+          j = Math.min(j + 1, text2.length);
+        }
+        else {
+          clearInterval(id);
+          resolve();
+        }
+      }
+    });
   }
 
   function focusOnTable() {
@@ -149,46 +196,6 @@
     });
   }
 
-  async function startIntro() {
-    await new Promise(resolve => {
-      let id = setInterval(removeTitle, TEXT_INTERVAL);
-
-      function removeTitle() {
-        const text1 = title.firstChild.nodeValue;
-        const text2 = title.firstElementChild.innerText;
-        title.firstChild.nodeValue = text1.slice(0, -1);
-        title.firstElementChild.innerText = text2.slice(0, -1);
-
-        if (text1.length === 0 && text2.length === 0) {
-          clearInterval(id);
-          resolve();
-        }
-      }
-    });
-
-    await new Promise(resolve => {
-      let i = 1;
-      let j = 1;
-      const id = setInterval(createSongTitle, TEXT_INTERVAL);
-
-      function createSongTitle() {
-        const text1 = "【東方】Bad Apple!!【影絵】";
-        const text2 = "Alstroemeria Records";
-        title.firstChild.nodeValue = text1.slice(0, i);
-        title.firstElementChild.innerText = text2.slice(0, j);
-
-        if (i !== text1.length || j !== text2.length) {
-          i = Math.min(i + 1, text1.length);
-          j = Math.min(j + 1, text2.length);
-        }
-        else {
-          clearInterval(id);
-          resolve();
-        }
-      }
-    });
-  }
-
   async function startBadApple() {
     document.body.appendChild(audio);
     audio.play();
@@ -201,16 +208,18 @@
         setTimeout(() => {
           animationPromise = playAnimation();
           resolve();
-        }, 150); //try to sync the music with the animation
+        }, 150); //setTimeout will try to sync the music with the animation
         setTimeout(console.clear, 0); //setTimeout to clear the mixed-content warning 
         subtitlesPromise = displaySubtitles(transcripts, audio);
-        audio.onplaying = null; //prevent this function from being called twice
+        audio.onplaying = null; //prevent this handler from being called twice
       };
     });
 
     await subtitlesPromise
     setTimeout(logCredit, 1000);
+
     await animationPromise;
+    //wait until song ended
     await new Promise(resolve => {
       audio.addEventListener("ended", resolve);
     })
@@ -371,7 +380,7 @@
     );
   }
 
-  async function restoreToOriginal() {
+  async function restoreTimetableToOriginal() {
     audio.remove();
 
     {
