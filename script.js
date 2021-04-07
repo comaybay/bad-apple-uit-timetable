@@ -375,7 +375,7 @@
       "\nSource code: https://github.com/comaybay/bad-apple-uit-timetable" +
       "\n======================================" +
       "\nSpecial thanks to:" +
-      "\n  kevinjycui: for inspired me to make this" +
+      "\n  kevinjycui: for inspiring me to make this" +
       "\n  touhouwiki.net and kafkafuura: for providing song lyrics and translations" +
       "\n======================================" +
       "\nThank you for watching!"
