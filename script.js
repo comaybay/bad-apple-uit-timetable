@@ -173,7 +173,7 @@
 
       function createSongTitle() {
         const text1 = "【東方】Bad Apple!!【影絵】";
-        const text2 = "Nomico";
+        const text2 = "Alstroemeria Records";
         title.firstChild.nodeValue = text1.slice(0, i);
         title.firstElementChild.innerText = text2.slice(0, j);
 
