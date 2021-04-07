@@ -353,7 +353,6 @@
   }
 
   function logCredit() {
-    //TODO: Vietnamese subtitles.
     console.log(
       "Bad Apple!! (Alstroemeria Records)" +
       "\nOriginal Composition: ZUN" +
