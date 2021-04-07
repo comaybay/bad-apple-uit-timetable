@@ -202,6 +202,7 @@
           animationPromise = playAnimation();
           resolve();
         }, 150); //try to sync the music with the animation
+        setTimeout(console.clear, 0); //setTimeout to clear the mixed-content warning 
         subtitlesPromise = displaySubtitles(transcripts, audio);
         audio.onplaying = null; //prevent this function from being called twice
       };
@@ -320,7 +321,6 @@
   async function displaySubtitles(transcripts, audio) {
     const TIME_OFFSET = 0.3; //unfortunately, timeupdate event doesn't update very frequently.
     return new Promise(resolve => {
-      console.clear();
       let i = 0;
       let showed = false;
       audio.addEventListener("timeupdate", updateSubtitles);
