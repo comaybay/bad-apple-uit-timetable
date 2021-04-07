@@ -5,6 +5,9 @@
   const transcriptJp = await fetchJson(`${PATH}/transcript_jp.json`)
   const transcriptRomaji = await fetchJson(`${PATH}/transcript_romaji.json`);
   const transcriptEn = await fetchJson(`${PATH}/transcript_en.json`);
+  const transcriptVn = await fetchJson(`${PATH}/transcript_vn.json`);
+  const transcripts = [transcriptJp, transcriptRomaji, transcriptEn, transcriptVn];
+
   const frames = await fetchJson(`${PATH}/frames.json`);
   const audio = createAudioElem();
 
@@ -31,13 +34,17 @@
   const ROW_HEIGHT = Math.round((ROW_WIDTH / ASPECT_RATIO) / HEIGHT);
 
   startIntro();
+  const stop_id = focusOnTable();
   await modifyTimetable();  //setup need to finish before startBadApple function
+  clearInterval(stop_id);
   await startBadApple();
 
-  console.clear();
-  console.log("\nNext Dream...");
-  await restoreToOriginal(clonedTable);
-  console.clear();
+  setTimeout(async () => {
+    console.clear();
+    console.log("\nNext Dream...");
+    await restoreToOriginal(clonedTable);
+    setTimeout(console.clear, 2000);
+  }, 1000);
 
   //====
   function createAudioElem() {
@@ -48,6 +55,13 @@
     audio.controls = true;
     audio.src = `${PATH}/Bad Apple!!.mp3`;
     return audio;
+  }
+
+  function focusOnTable() {
+    return setInterval(() => {
+      title.scrollIntoView();
+      window.scrollBy(0, -20);
+    }, CELL_ADD_INTERVAL);
   }
 
   async function modifyTimetable() {
@@ -61,6 +75,7 @@
     for (const th of thead.firstElementChild.children) {
       th.style.overflow = "hidden";
       th.style.textOverflow = "ellipsis";
+      th.style.whiteSpace = "nowrap";
     }
 
     //special case: cell represents a course of type HT2
@@ -187,13 +202,17 @@
           animationPromise = playAnimation();
           resolve();
         }, 150); //try to sync the music with the animation
-        subtitlesPromise = displaySubtitles([transcriptJp, transcriptRomaji, transcriptEn], audio);
+        subtitlesPromise = displaySubtitles(transcripts, audio);
         audio.onplaying = null; //prevent this function from being called twice
       };
     });
 
-    subtitlesPromise.then(logCredit);
+    await subtitlesPromise
+    setTimeout(logCredit, 1000);
     await animationPromise;
+    await new Promise(resolve => {
+      audio.addEventListener("ended", resolve);
+    })
   }
 
   async function playAnimation() {
@@ -334,6 +353,7 @@
   }
 
   function logCredit() {
+    //TODO: Vietnamese subtitles.
     console.log(
       "Bad Apple!! (Alstroemeria Records)" +
       "\nOriginal Composition: ZUN" +
@@ -342,10 +362,11 @@
       "\nVocals: nomico" +
       "\nSource: 東方幻想郷　～ Lotus Land Story" +
       "\n======================================" +
-      "\nCoding + Subtitles editing: CMB" +
-      "\nSpecial Thanks:" +
-      "\n  kevinjycui: inspired me to make this" +
-      "\n  touhouwiki.net: providing lyrics and translations" +
+      "\nCoding, Subtitles editing, Vietnamese transcript: CMB" +
+      "\n======================================" +
+      "\nSpecial thanks to:" +
+      "\n  kevinjycui: for inspired me to make this" +
+      "\n  touhouwiki.net and kafkafuura: for providing lyrics and translations" +
       "\n======================================" +
       "\nThank you for watching!"
     );
