@@ -215,14 +215,15 @@
       };
     });
 
+    const songFinishedPromise = new Promise(resolve => {
+      audio.addEventListener("ended", resolve);
+    });
+
     await subtitlesPromise
     setTimeout(logCredits, 1000);
 
     await animationPromise;
-    //wait until song ended
-    await new Promise(resolve => {
-      audio.addEventListener("ended", resolve);
-    })
+    await songFinishedPromise
   }
 
   async function playAnimation() {

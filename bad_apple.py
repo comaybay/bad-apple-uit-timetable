@@ -2,6 +2,7 @@ from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
 import os
 
+
 server = TCPServer(("", 9999), SimpleHTTPRequestHandler)
 
 # start chrome without cors
