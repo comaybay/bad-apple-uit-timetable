@@ -1,4 +1,5 @@
-from preprocess import video, transcript
+import video
+import transcript
 
 import os
 import sys
